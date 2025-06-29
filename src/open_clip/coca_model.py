@@ -270,10 +270,11 @@ class CoCa(nn.Module):
             # align text_embs and thus logits with labels for teacher-forcing caption loss
             token_embs = token_embs[:, :-1]
 
-        logits = self.text_decoder(image_embs, token_embs)
+        logits, hidden_state = self.text_decoder(image_embs, token_embs)
         out_dict = {
             "image_features": image_latent,
             "text_features": text_latent,
+            "hidden_state": hidden_state,
             "logits": logits,
             "logit_scale": self.logit_scale.exp()
         }

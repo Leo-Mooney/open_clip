@@ -1200,11 +1200,12 @@ class MultimodalTransformer(Transformer):
         if not self.batch_first:
             text_embs = text_embs.permute(1, 0, 2)  # LND -> NLD
 
-        out = self.ln_final(text_embs)
+        hidden_state = self.ln_final(text_embs)
         if self.text_projection is not None:
-            out = out @ self.text_projection
+            out = hidden_state @ self.text_projection
+            return out, hidden_state
 
-        return out
+        return hidden_state
 
     @torch.jit.ignore
     def set_grad_checkpointing(self, enable=True):
